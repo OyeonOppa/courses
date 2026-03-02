@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | ระบบรับสมัครหลักสูตร</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+    :root {
+        --primary:#1e40af;--primary-light:#3b82f6;--primary-dark:#1e3a8a;
+        --primary-50:#eff6ff;--primary-100:#dbeafe;--primary-200:#bfdbfe;
+        --white:#fff;--gray-50:#f8fafc;--gray-100:#f1f5f9;--gray-200:#e2e8f0;
+        --gray-300:#cbd5e1;--gray-400:#94a3b8;--gray-500:#64748b;--gray-600:#475569;
+        --gray-700:#334155;--gray-800:#1e293b;--gray-900:#0f172a;
+        --red-500:#ef4444;--red-50:#fef2f2;--green-500:#22c55e;--green-50:#f0fdf4;
+        --green-600:#16a34a;--amber-500:#f59e0b;--amber-50:#fffbeb;
+        --shadow-sm:0 1px 2px rgba(0,0,0,.05);--shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
+        --shadow-md:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);
+        --shadow-lg:0 10px 15px -3px rgba(0,0,0,.08);
+        --radius:8px;--radius-lg:12px;--radius-xl:16px;--transition:.2s ease;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Sarabun',sans-serif;font-size:16px;line-height:1.6;color:var(--gray-800);background:var(--gray-50);min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+
+    /* HEADER */
+    .header{background:var(--white);border-bottom:2px solid var(--primary);position:sticky;top:0;z-index:100;box-shadow:var(--shadow-sm)}
+    .header-inner{max-width:1200px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
+    .logo-group{display:flex;align-items:center;gap:12px}
+    .logo-icon{width:36px;height:36px;background:var(--primary);border-radius:9px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(30,64,175,.25)}
+    .logo-title{font-size:17px;font-weight:700;color:var(--gray-900)}
+    .logo-sub{font-size:11.5px;color:var(--gray-400)}
+    .header-right{display:flex;align-items:center;gap:12px}
+    .admin-badge{font-size:12px;font-weight:700;color:var(--primary);background:var(--primary-50);padding:4px 10px;border-radius:20px;border:1px solid var(--primary-100)}
+
+    /* BUTTONS */
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 20px;font-family:'Sarabun',sans-serif;font-size:15px;font-weight:600;border:none;border-radius:var(--radius);cursor:pointer;transition:all var(--transition);white-space:nowrap}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+    .btn-primary{background:var(--primary);color:var(--white)}
+    .btn-primary:hover:not(:disabled){background:var(--primary-dark);box-shadow:0 4px 12px rgba(30,64,175,.3);transform:translateY(-1px)}
+    .btn-secondary{background:var(--gray-100);color:var(--gray-700);border:1px solid var(--gray-200)}
+    .btn-secondary:hover:not(:disabled){background:var(--gray-200)}
+    .btn-outline{background:transparent;color:var(--primary);border:1.5px solid var(--primary-200)}
+    .btn-outline:hover:not(:disabled){background:var(--primary-50);border-color:var(--primary)}
+    .btn-sm{padding:6px 14px;font-size:13px}
+    .btn-text.hidden,.btn-loader.hidden{display:none}
+    .btn-loader{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .hidden{display:none!important}
+
+    /* FORM */
+    .form-group{margin-bottom:16px}
+    .form-group label{display:block;font-size:13.5px;font-weight:600;color:var(--gray-700);margin-bottom:5px}
+    .form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 14px;font-family:'Sarabun',sans-serif;font-size:15px;border:1.5px solid var(--gray-200);border-radius:var(--radius);background:var(--white);color:var(--gray-800);transition:border-color var(--transition),box-shadow var(--transition)}
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--primary-light);box-shadow:0 0 0 3px rgba(59,130,246,.12)}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+    /* MAIN */
+    .admin-main{flex:1;max-width:1200px;margin:0 auto;width:100%;padding:24px}
+
+    /* TABS */
+    .tabs{display:flex;gap:4px;background:var(--gray-100);border-radius:var(--radius);padding:4px;margin-bottom:24px}
+    .tab{flex:1;padding:10px 16px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;border:none;border-radius:6px;background:transparent;color:var(--gray-500);cursor:pointer;transition:all var(--transition)}
+    .tab.active{background:var(--white);color:var(--primary);box-shadow:var(--shadow-sm)}
+    .tab:hover:not(.active){color:var(--gray-700)}
+
+    /* PANELS */
+    .panel{display:none;animation:fadeUp .3s ease}
+    .panel.active{display:block}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+    /* STATS */
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+    .stat{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:24px;text-align:center;box-shadow:var(--shadow-sm);border-top:3px solid var(--gray-300);transition:transform .2s}
+    .stat:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+    .stat.s-blue{border-top-color:var(--primary)}
+    .stat.s-green{border-top-color:var(--green-500)}
+    .stat.s-amber{border-top-color:var(--amber-500)}
+    .stat-num{font-size:36px;font-weight:700;color:var(--gray-900);line-height:1;margin-bottom:4px}
+    .stat-lbl{font-size:13px;color:var(--gray-500);font-weight:500}
+
+    /* TABLE SECTION */
+    .panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px}
+    .panel-header h2{font-size:18px;font-weight:700;color:var(--gray-900)}
+    .panel-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .filter-select{padding:7px 12px;font-family:'Sarabun',sans-serif;font-size:13px;border:1px solid var(--gray-200);border-radius:var(--radius);background:var(--white)}
+    .search-input{padding:7px 12px;font-family:'Sarabun',sans-serif;font-size:13px;border:1px solid var(--gray-200);border-radius:var(--radius);width:220px}
+    .search-input:focus{outline:none;border-color:var(--primary-light);box-shadow:0 0 0 2px rgba(59,130,246,.1)}
+
+    /* TABLE */
+    .table-wrap{overflow-x:auto;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+    table{width:100%;border-collapse:collapse;font-size:14px}
+    thead{background:var(--gray-50);border-bottom:1px solid var(--gray-200)}
+    th{padding:12px 14px;text-align:left;font-weight:600;color:var(--gray-600);font-size:12px;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
+    td{padding:12px 14px;border-bottom:1px solid var(--gray-100);color:var(--gray-700)}
+    tbody tr:hover{background:var(--primary-50)}
+    .empty-td{text-align:center;padding:40px;color:var(--gray-400);font-style:italic}
+    .badge-t{display:inline-block;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:700}
+    .badge-a{background:var(--primary-50);color:var(--primary)}
+    .badge-b{background:var(--green-50);color:var(--green-600)}
+    .btn-view{padding:4px 10px;font-size:12px;background:var(--primary-50);color:var(--primary);border:1px solid var(--primary-100);border-radius:4px;cursor:pointer;font-family:'Sarabun',sans-serif;font-weight:600;transition:all var(--transition)}
+    .btn-view:hover{background:var(--primary);color:var(--white)}
+    .row-count{font-size:13px;color:var(--gray-400);margin-top:10px}
+
+    /* SETTINGS FORM */
+    .settings-card{max-width:600px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);padding:28px;box-shadow:var(--shadow-sm)}
+
+    /* MODAL */
+    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:1000;padding:24px}
+    .modal{background:var(--white);border-radius:var(--radius-xl);width:100%;max-width:720px;max-height:85vh;overflow-y:auto;box-shadow:var(--shadow-lg)}
+    .modal-head{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid var(--gray-200);position:sticky;top:0;background:var(--white);border-radius:var(--radius-xl) var(--radius-xl) 0 0}
+    .modal-head h3{font-size:18px;font-weight:700;color:var(--gray-900)}
+    .modal-close{width:32px;height:32px;border:none;background:var(--gray-100);border-radius:50%;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gray-500);transition:all var(--transition)}
+    .modal-close:hover{background:var(--gray-200);color:var(--gray-700)}
+    .modal-body{padding:24px}
+    .det-section{margin-bottom:20px}
+    .det-section h4{font-size:13px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.3px;margin-bottom:10px;padding-bottom:4px;border-bottom:1px solid var(--primary-100)}
+    .det-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px}
+    .det-item{display:flex;flex-direction:column}
+    .det-item .dl{font-size:11px;color:var(--gray-400);font-weight:500}
+    .det-item .dv{font-size:14px;color:var(--gray-800);font-weight:500;word-break:break-word}
+    .det-item.full{grid-column:1/-1}
+    .doc-link{color:var(--primary);text-decoration:none;font-size:13px}
+    .doc-link:hover{text-decoration:underline}
+
+    /* OVERLAY */
+    .overlay{position:fixed;inset:0;background:rgba(255,255,255,.85);backdrop-filter:blur(4px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:9999}
+    .overlay-spinner{width:40px;height:40px;border:4px solid var(--primary-100);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite}
+
+    /* TOAST */
+    .toast{position:fixed;top:20px;right:20px;z-index:10000;padding:13px 20px;border-radius:var(--radius);font-family:'Sarabun',sans-serif;font-size:14px;font-weight:500;box-shadow:var(--shadow-lg);animation:slideIn .3s ease;max-width:380px;color:#fff}
+    .toast-ok{background:var(--green-600)}.toast-err{background:var(--red-500)}
+    @keyframes slideIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+
+    /* FOOTER */
+    .footer{margin-top:auto;padding:18px 24px;text-align:center;font-size:12.5px;color:var(--gray-400);border-top:1px solid var(--gray-100);background:var(--white)}
+
+    /* RESPONSIVE */
+    @media(max-width:768px){
+        .admin-main{padding:16px}
+        .stats{grid-template-columns:repeat(2,1fr)}
+        .tabs{flex-wrap:wrap}
+        .panel-header{flex-direction:column;align-items:flex-start}
+        .panel-actions{width:100%}
+        .search-input{width:100%}
+        .det-grid{grid-template-columns:1fr}
+        .form-row{grid-template-columns:1fr}
+    }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo-group">
+                <div class="logo-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 21V8l8-5 8 5v13l-8-3.5L4 21z" fill="#fff" opacity=".9"/><path d="M12 3v14" stroke="#93c5fd" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+                <div><div class="logo-title">ระบบหลังบ้าน</div><div class="logo-sub">Admin Panel</div></div>
+            </div>
+            <div class="header-right">
+                <span class="admin-badge">🔒 Admin</span>
+                <button class="btn btn-outline btn-sm" id="logoutBtn">ออกจากระบบ</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="admin-main">
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="tab active" data-p="dash">📊 ภาพรวม</button>
+            <button class="tab" data-p="list">📋 รายชื่อผู้สมัคร</button>
+            <button class="tab" data-p="settings">⚙️ ตั้งค่าหลักสูตร</button>
+        </div>
+
+        <!-- ══ DASHBOARD ══ -->
+        <div class="panel active" id="pDash">
+            <div class="stats">
+                <div class="stat"><div class="stat-num" id="sTotal">-</div><div class="stat-lbl">ผู้สมัครทั้งหมด</div></div>
+                <div class="stat s-blue"><div class="stat-num" id="sA">-</div><div class="stat-lbl">ประเภท ก</div></div>
+                <div class="stat s-green"><div class="stat-num" id="sB">-</div><div class="stat-lbl">ประเภท ข</div></div>
+                <div class="stat s-amber"><div class="stat-num" id="sDays">-</div><div class="stat-lbl">วันที่เหลือ</div></div>
+            </div>
+        </div>
+
+        <!-- ══ APPLICANT LIST ══ -->
+        <div class="panel" id="pList">
+            <div class="panel-header">
+                <h2>รายชื่อผู้สมัคร</h2>
+                <div class="panel-actions">
+                    <select class="filter-select" id="filterType">
+                        <option value="all">ทั้งหมด</option>
+                        <option value="A">ประเภท ก</option>
+                        <option value="B">ประเภท ข</option>
+                    </select>
+                    <input type="text" class="search-input" id="searchInput" placeholder="🔍 ค้นหาชื่อหรือเลขบัตร...">
+                    <button class="btn btn-primary btn-sm" id="exportBtn">📥 Export CSV</button>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr>
+                        <th>ลำดับ</th><th>ประเภท</th><th>ชื่อ-นามสกุล</th>
+                        <th>เลขบัตร</th><th>หน่วยงาน</th><th>วันที่สมัคร</th><th>จัดการ</th>
+                    </tr></thead>
+                    <tbody id="tBody"><tr><td colspan="7" class="empty-td">กำลังโหลด...</td></tr></tbody>
+                </table>
+            </div>
+            <div class="row-count" id="rowCount"></div>
+        </div>
+
+        <!-- ══ SETTINGS ══ -->
+        <div class="panel" id="pSettings">
+            <h2 style="font-size:18px;font-weight:700;margin-bottom:16px;">ตั้งค่าหลักสูตร</h2>
+            <div class="settings-card">
+                <div class="form-group"><label>ชื่อหลักสูตร</label><input type="text" id="setCName"></div>
+                <div class="form-group"><label>รุ่นที่</label><input type="text" id="setCohort"></div>
+                <div class="form-group"><label>รายละเอียด</label><textarea id="setDesc" rows="3"></textarea></div>
+                <div class="form-row">
+                    <div class="form-group"><label>วันเปิดรับสมัคร</label><input type="date" id="setStart"></div>
+                    <div class="form-group"><label>วันปิดรับสมัคร</label><input type="date" id="setEnd"></div>
+                </div>
+                <div class="form-group"><label>สถานะ</label>
+                    <select id="setStatus"><option value="open">เปิดรับสมัคร</option><option value="closed">ปิดรับสมัคร</option></select>
+                </div>
+                <button class="btn btn-primary" id="saveSetBtn"><span class="btn-text">💾 บันทึกการตั้งค่า</span><span class="btn-loader hidden"></span></button>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL -->
+    <div class="modal-bg hidden" id="modal">
+        <div class="modal">
+            <div class="modal-head"><h3>รายละเอียดผู้สมัคร</h3><button class="modal-close" id="modalClose">&times;</button></div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <footer class="footer">&copy; 2026 สถาบันพระปกเกล้า (King Prajadhipok's Institute)</footer>
+    <div class="overlay hidden" id="overlay"><div class="overlay-spinner"></div><p>กำลังโหลด...</p></div>
+
+    <script src="config.js"></script>
+    <script>
+    if(typeof CONFIG==='undefined'){var CONFIG={GAS_URL:'https://script.google.com/macros/s/AKfycbyNiLUBuwfSh_4QhplEX6qw6BwlcK6e1XtwnxDbcczCD9OOBYbUULewU1QEXzGm0Tz5/exec',get isMock(){return!this.GAS_URL},SESSION_KEY:'kpi_course_session',MAX_FILE:5242880,FILE_TYPES:['application/pdf','image/jpeg','image/png'],ADMIN_USER:'admin',ADMIN_PASS:'kpi@admin2026'};}
+    </script>
+    <script>
+
+    const $ = id => document.getElementById(id);
+    const U = {
+        async post(action,data={}){
+            if(CONFIG.isMock) return this._mock(action,data);
+            try{const r=await fetch(CONFIG.GAS_URL,{method:'POST',mode:'cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action,...data})});return await r.json();}
+            catch{return{success:false,error:'เชื่อมต่อไม่ได้'};}
+        },
+        async get(action,p={}){
+            if(CONFIG.isMock) return this._mockGet(action,p);
+            try{const u=new URL(CONFIG.GAS_URL);u.searchParams.set('action',action);Object.entries(p).forEach(([k,v])=>u.searchParams.set(k,v));return await(await fetch(u,{mode:'cors'})).json();}
+            catch{return{success:false,error:'เชื่อมต่อไม่ได้'};}
+        },
+        // Mock
+        _mockApps: JSON.parse(localStorage.getItem('_mock_apps')||'{}'),
+        _mock(action,d){
+            return new Promise(r=>setTimeout(()=>{
+                if(action==='updateSettings'){
+                    localStorage.setItem('_mock_settings',JSON.stringify(d));
+                    r({success:true});
+                } else r({success:false});
+            },500));
+        },
+        _mockGet(action){
+            if(action==='getSettings'){
+                const s=JSON.parse(localStorage.getItem('_mock_settings')||'null');
+                return Promise.resolve({success:true,data:s||{courseName:'หลักสูตรประกาศนียบัตรชั้นสูง',cohort:'รุ่นที่ 1',description:'',startDate:'2026-01-01',endDate:'2026-06-30',status:'open'}});
+            }
+            if(action==='getAllApplications'){
+                const apps=Object.values(this._mockApps);
+                return Promise.resolve({success:true,data:apps});
+            }
+            if(action==='getStats'){
+                const apps=Object.values(this._mockApps);
+                return Promise.resolve({success:true,data:{total:apps.length,typeA:apps.filter(a=>a.courseType==='A').length,typeB:apps.filter(a=>a.courseType==='B').length,daysLeft:120}});
+            }
+            return Promise.resolve({success:false});
+        },
+        fmtDate(ds){if(!ds)return'-';const d=new Date(ds),m=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];return`${d.getDate()} ${m[d.getMonth()]} ${d.getFullYear()+543}`;},
+        fmtId(id){if(!id||String(id).length!==13)return id||'';id=String(id);return`${id[0]}-${id.slice(1,5)}-${id.slice(5,10)}-${id.slice(10,12)}-${id[12]}`;},
+        overlay(s){$('overlay').classList.toggle('hidden',!s);},
+        toast(msg,ok=true){const t=document.createElement('div');t.className=`toast toast-${ok?'ok':'err'}`;t.textContent=msg;document.body.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300);},3000);},
+        btnLoad(id,on){const b=$(id);if(!b)return;b.disabled=on;const t=b.querySelector('.btn-text'),l=b.querySelector('.btn-loader');if(t)t.classList.toggle('hidden',on);if(l)l.classList.toggle('hidden',!on);},
+    };
+
+    let allApps = [];
+
+    /* ══════════════ INIT ══════════════ */
+    document.addEventListener('DOMContentLoaded', () => {
+        // Auth check - ในระบบจริงควร check session
+        // Mock mode: เข้าได้เลย
+        $('logoutBtn').onclick = () => { sessionStorage.removeItem(CONFIG.SESSION_KEY); window.location.href='index.html'; };
+        initTabs();
+        loadDashboard();
+        loadApplicants();
+        loadSettings();
+        $('modalClose').onclick = () => $('modal').classList.add('hidden');
+        $('modal').onclick = e => { if(e.target===$('modal')) $('modal').classList.add('hidden'); };
+        if(CONFIG.isMock) console.log('%c★ Admin Mock Mode','color:#3b82f6;font-size:14px;font-weight:bold');
+    });
+
+    /* ══════════════ TABS ══════════════ */
+    function initTabs(){
+        document.querySelectorAll('.tab').forEach(t=>{
+            t.addEventListener('click',()=>{
+                document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+                document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+                t.classList.add('active');
+                $('p'+capitalize(t.dataset.p)).classList.add('active');
+            });
+        });
+    }
+    function capitalize(s){return s.charAt(0).toUpperCase()+s.slice(1);}
+
+    /* ══════════════ DASHBOARD ══════════════ */
+    async function loadDashboard(){
+        const r = await U.get('getStats');
+        if(r.success&&r.data){
+            $('sTotal').textContent=r.data.total;
+            $('sA').textContent=r.data.typeA;
+            $('sB').textContent=r.data.typeB;
+            $('sDays').textContent=r.data.daysLeft;
+        }
+    }
+
+    /* ══════════════ APPLICANT LIST ══════════════ */
+    async function loadApplicants(){
+        const r = await U.get('getAllApplications');
+        if(r.success) allApps = r.data || [];
+        renderTable(allApps);
+
+        $('filterType').onchange = applyFilter;
+        $('searchInput').oninput = applyFilter;
+        $('exportBtn').onclick = exportCsv;
+    }
+
+    function applyFilter(){
+        const type = $('filterType').value;
+        const q = $('searchInput').value.trim().toLowerCase();
+        let filtered = allApps;
+        if(type!=='all') filtered = filtered.filter(a=>a.courseType===type);
+        if(q) filtered = filtered.filter(a=>{
+            const name = ((a.prefix||'')+(a.firstNameTh||'')+' '+(a.lastNameTh||'')).toLowerCase();
+            const id = String(a.idCard||'');
+            return name.includes(q) || id.includes(q);
+        });
+        renderTable(filtered);
+    }
+
+    function renderTable(apps){
+        const tbody = $('tBody');
+        if(!apps.length){
+            tbody.innerHTML = '<tr><td colspan="7" class="empty-td">ไม่พบข้อมูล</td></tr>';
+            $('rowCount').textContent = '';
+            return;
+        }
+        tbody.innerHTML = apps.map((a,i)=>{
+            const name = (a.prefix||'')+(a.firstNameTh||'')+' '+(a.lastNameTh||'');
+            const typeBadge = a.courseType==='A'
+                ? '<span class="badge-t badge-a">ก</span>'
+                : '<span class="badge-t badge-b">ข</span>';
+            return `<tr>
+                <td>${i+1}</td>
+                <td>${typeBadge}</td>
+                <td>${esc(name)}</td>
+                <td>${U.fmtId(a.idCard)}</td>
+                <td>${esc(a.organization||'-')}</td>
+                <td>${U.fmtDate(a.submittedAt)}</td>
+                <td><button class="btn-view" onclick="showDetail(${i})">ดูรายละเอียด</button></td>
+            </tr>`;
+        }).join('');
+        $('rowCount').textContent = `แสดง ${apps.length} รายการ`;
+    }
+
+    function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+    /* ══════════════ DETAIL MODAL ══════════════ */
+    function showDetail(idx){
+        const filtered = getCurrentFiltered();
+        const a = filtered[idx];
+        if(!a) return;
+
+        const docLinks = ['idCardCopy','photo','eduCert','recommendation','other'].map(k=>{
+            const url = a['doc_'+k];
+            if(!url) return null;
+            const labels = {idCardCopy:'สำเนาบัตร',photo:'รูปถ่าย',eduCert:'วุฒิการศึกษา',recommendation:'หนังสือรับรอง',other:'อื่นๆ'};
+            return `<a href="${esc(url)}" target="_blank" class="doc-link">📎 ${labels[k]}</a>`;
+        }).filter(Boolean).join(' &nbsp; ') || '-';
+
+        const supSection = a.courseType==='A' ? `
+            <div class="det-section"><h4>ผู้รับรอง (ประเภท ก)</h4><div class="det-grid">
+                <div class="det-item"><span class="dl">ชื่อ</span><span class="dv">${esc(a.supervisorName)}</span></div>
+                <div class="det-item"><span class="dl">ตำแหน่ง</span><span class="dv">${esc(a.supervisorPosition)}</span></div>
+                <div class="det-item"><span class="dl">เบอร์โทร</span><span class="dv">${esc(a.supervisorPhone)||'-'}</span></div>
+            </div></div>` : '';
+
+        $('modalBody').innerHTML = `
+            <div class="det-section"><h4>ข้อมูลส่วนตัว</h4><div class="det-grid">
+                <div class="det-item"><span class="dl">ประเภท</span><span class="dv">${a.courseType==='A'?'ก — ผู้บริหาร':'ข — บุคคลทั่วไป'}</span></div>
+                <div class="det-item"><span class="dl">เลขบัตร</span><span class="dv">${U.fmtId(a.idCard)}</span></div>
+                <div class="det-item"><span class="dl">ชื่อ-นามสกุล (ไทย)</span><span class="dv">${esc(a.prefix)}${esc(a.firstNameTh)} ${esc(a.lastNameTh)}</span></div>
+                <div class="det-item"><span class="dl">Name (Eng)</span><span class="dv">${esc(a.firstNameEn)} ${esc(a.lastNameEn)}</span></div>
+                <div class="det-item"><span class="dl">วันเกิด</span><span class="dv">${esc(a.birthDate)}</span></div>
+                <div class="det-item"><span class="dl">โทรศัพท์</span><span class="dv">${esc(a.phone)}</span></div>
+                <div class="det-item"><span class="dl">อีเมล</span><span class="dv">${esc(a.email)}</span></div>
+                <div class="det-item full"><span class="dl">ที่อยู่</span><span class="dv">${esc(a.address)} จ.${esc(a.province)} ${esc(a.zipCode)}</span></div>
+            </div></div>
+            <div class="det-section"><h4>การศึกษา</h4><div class="det-grid">
+                <div class="det-item"><span class="dl">ระดับ</span><span class="dv">${esc(a.eduLevel)}</span></div>
+                <div class="det-item"><span class="dl">สาขา</span><span class="dv">${esc(a.eduMajor)}</span></div>
+                <div class="det-item"><span class="dl">สถาบัน</span><span class="dv">${esc(a.eduInstitute)}</span></div>
+                <div class="det-item"><span class="dl">ปีสำเร็จ</span><span class="dv">${esc(a.eduYear)}</span></div>
+            </div></div>
+            <div class="det-section"><h4>อาชีพ</h4><div class="det-grid">
+                <div class="det-item"><span class="dl">ตำแหน่ง</span><span class="dv">${esc(a.position)}</span></div>
+                <div class="det-item"><span class="dl">หน่วยงาน</span><span class="dv">${esc(a.organization)}</span></div>
+                <div class="det-item"><span class="dl">ประเภท</span><span class="dv">${esc(a.orgType)}</span></div>
+                <div class="det-item"><span class="dl">ประสบการณ์</span><span class="dv">${esc(a.workExperience)} ปี</span></div>
+                <div class="det-item full"><span class="dl">ที่อยู่หน่วยงาน</span><span class="dv">${esc(a.orgAddress)}</span></div>
+            </div></div>
+            ${supSection}
+            <div class="det-section"><h4>เหตุผลในการสมัคร</h4>
+                <div class="det-item full"><span class="dv">${esc(a.motivation)}</span></div>
+            </div>
+            <div class="det-section"><h4>เอกสารแนบ</h4>
+                <div class="det-item full"><span class="dv">${docLinks}</span></div>
+            </div>
+            <div style="font-size:12px;color:var(--gray-400);margin-top:12px;">
+                สมัครเมื่อ: ${esc(a.submittedAt)||'-'} · อัปเดตล่าสุด: ${esc(a.updatedAt)||'-'}
+            </div>`;
+        $('modal').classList.remove('hidden');
+    }
+
+    function getCurrentFiltered(){
+        const type=$('filterType').value;
+        const q=$('searchInput').value.trim().toLowerCase();
+        let f=allApps;
+        if(type!=='all')f=f.filter(a=>a.courseType===type);
+        if(q)f=f.filter(a=>{
+            const name=((a.prefix||'')+(a.firstNameTh||'')+' '+(a.lastNameTh||'')).toLowerCase();
+            return name.includes(q)||String(a.idCard||'').includes(q);
+        });
+        return f;
+    }
+
+    /* ══════════════ EXPORT CSV ══════════════ */
+    function exportCsv(){
+        const filtered = getCurrentFiltered();
+        if(!filtered.length){U.toast('ไม่มีข้อมูลให้ Export',false);return;}
+        const headers = ['ลำดับ','ประเภท','คำนำหน้า','ชื่อ','นามสกุล','เลขบัตร','อีเมล','โทรศัพท์','หน่วยงาน','ตำแหน่ง','วันที่สมัคร'];
+        const rows = filtered.map((a,i)=>[
+            i+1, a.courseType==='A'?'ก':'ข', a.prefix, a.firstNameTh, a.lastNameTh,
+            a.idCard, a.email, a.phone, a.organization, a.position, a.submittedAt||''
+        ]);
+        const bom = '\uFEFF'; // UTF-8 BOM สำหรับ Excel
+        const csv = bom + [headers,...rows].map(r=>r.map(c=>'"'+String(c||'').replace(/"/g,'""')+'"').join(',')).join('\n');
+        const blob = new Blob([csv],{type:'text/csv;charset=utf-8'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href=url; a.download='applicants_'+new Date().toISOString().slice(0,10)+'.csv';
+        document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+        U.toast('Export CSV เรียบร้อย!');
+    }
+
+    /* ══════════════ SETTINGS ══════════════ */
+    async function loadSettings(){
+        const r = await U.get('getSettings');
+        if(r.success&&r.data){
+            $('setCName').value = r.data.courseName||'';
+            $('setCohort').value = r.data.cohort||'';
+            $('setDesc').value = r.data.description||'';
+            $('setStart').value = r.data.startDate||'';
+            $('setEnd').value = r.data.endDate||'';
+            $('setStatus').value = r.data.status||'open';
+        }
+        $('saveSetBtn').onclick = saveSettings;
+    }
+
+    async function saveSettings(){
+        U.btnLoad('saveSetBtn',true);
+        const payload = {
+            courseName: $('setCName').value.trim(),
+            cohort: $('setCohort').value.trim(),
+            description: $('setDesc').value.trim(),
+            startDate: $('setStart').value,
+            endDate: $('setEnd').value,
+            status: $('setStatus').value,
+        };
+        const r = await U.post('updateSettings', payload);
+        U.btnLoad('saveSetBtn',false);
+        if(r.success){
+            U.toast('บันทึกตั้งค่าเรียบร้อย!');
+            loadDashboard(); // refresh days left
+        } else {
+            U.toast(r.error||'เกิดข้อผิดพลาด',false);
+        }
+    }
+    </script>
+</body>
+</html>
