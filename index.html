@@ -5,19 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ระบบรับสมัครหลักสูตร | สถาบันพระปกเกล้า</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Noto+Serif+Thai:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-    /* ============================================
-       Global + Auth Page Styles
-       Theme: White / Blue  |  Font: Sarabun
-       ============================================ */
     :root {
-        --primary: #1e40af;
-        --primary-light: #3b82f6;
-        --primary-dark: #1e3a8a;
-        --primary-50: #eff6ff;
-        --primary-100: #dbeafe;
-        --primary-200: #bfdbfe;
+        --navy: #0c1d3f;
+        --navy-light: #162d5a;
+        --blue: #1e40af;
+        --blue-light: #3b82f6;
+        --gold: #c8a84e;
+        --gold-light: #dfc06a;
         --white: #ffffff;
         --gray-50: #f8fafc;
         --gray-100: #f1f5f9;
@@ -29,912 +25,315 @@
         --gray-700: #334155;
         --gray-800: #1e293b;
         --gray-900: #0f172a;
-        --red-500: #ef4444;
-        --red-50: #fef2f2;
-        --green-500: #22c55e;
-        --green-50: #f0fdf4;
-        --green-600: #16a34a;
-        --shadow-sm: 0 1px 2px rgba(0,0,0,.05);
-        --shadow: 0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
-        --shadow-md: 0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);
-        --shadow-lg: 0 10px 15px -3px rgba(0,0,0,.08),0 4px 6px -4px rgba(0,0,0,.06);
         --radius: 8px;
-        --radius-lg: 12px;
-        --radius-xl: 16px;
-        --transition: .2s ease;
+        --radius-xl: 20px;
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    body { font-family: 'Sarabun', sans-serif; color: var(--gray-800); background: var(--gray-50); min-height: 100vh; -webkit-font-smoothing: antialiased; }
 
-    body {
-        font-family: 'Sarabun', sans-serif;
-        font-size: 16px;
-        line-height: 1.6;
-        color: var(--gray-800);
-        background: var(--gray-50);
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        -webkit-font-smoothing: antialiased;
+    /* ═══ HERO ═══ */
+    .hero {
+        background: linear-gradient(160deg, var(--navy) 0%, var(--navy-light) 40%, #1a3568 100%);
+        color: var(--white);
+        position: relative;
+        overflow: hidden;
     }
-
-    /* ── HEADER ── */
-    .header {
-        background: var(--white);
-        border-bottom: 1px solid var(--gray-200);
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        box-shadow: var(--shadow-sm);
+    .hero::before {
+        content: '';
+        position: absolute;
+        top: -120px; right: -80px;
+        width: 500px; height: 500px;
+        background: radial-gradient(circle, rgba(200,168,78,.08) 0%, transparent 70%);
+        border-radius: 50%;
     }
-    .header-inner {
+    .hero-inner {
         max-width: 1100px;
         margin: 0 auto;
-        padding: 12px 24px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-    .logo-icon {
-        width: 36px;
-        height: 36px;
-        background: var(--primary);
-        border-radius: 9px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        box-shadow: 0 2px 8px rgba(30,64,175,.25);
-    }
-    .logo-icon svg { display: block; }
-    .logo-title {
-        font-size: 17px;
-        font-weight: 700;
-        color: var(--gray-900);
-        line-height: 1.2;
-    }
-    .logo-subtitle {
-        font-size: 11.5px;
-        color: var(--gray-400);
-        font-weight: 400;
-        letter-spacing: .2px;
-    }
-
-    /* ── BUTTONS ── */
-    .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        padding: 11px 22px;
-        font-family: 'Sarabun', sans-serif;
-        font-size: 15px;
-        font-weight: 600;
-        border: none;
-        border-radius: var(--radius);
-        cursor: pointer;
-        transition: all var(--transition);
-        white-space: nowrap;
+        padding: 56px 32px 52px;
         position: relative;
+        z-index: 1;
     }
-    .btn:disabled { opacity: .5; cursor: not-allowed; }
-    .btn-primary { background: var(--primary); color: var(--white); }
-    .btn-primary:hover:not(:disabled) {
-        background: var(--primary-dark);
-        box-shadow: 0 4px 12px rgba(30,64,175,.3);
-        transform: translateY(-1px);
-    }
-    .btn-primary:active:not(:disabled) { transform: translateY(0); }
-    .btn-full { width: 100%; }
-    .btn-text, .btn-loader { transition: opacity .2s; }
-    .btn-loader {
-        width: 18px; height: 18px;
-        border: 2.5px solid rgba(255,255,255,.3);
-        border-top-color: #fff;
-        border-radius: 50%;
-        animation: spin .6s linear infinite;
-    }
-    .btn-loader.hidden, .btn-text.hidden { display: none; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ── FORM ELEMENTS ── */
-    .form-group { margin-bottom: 16px; }
-    .form-group label {
-        display: block;
-        font-size: 13.5px;
-        font-weight: 600;
-        color: var(--gray-700);
-        margin-bottom: 5px;
-    }
-    .form-group input {
-        width: 100%;
-        padding: 10px 14px;
-        font-family: 'Sarabun', sans-serif;
-        font-size: 15px;
-        border: 1.5px solid var(--gray-200);
-        border-radius: var(--radius);
-        background: var(--white);
-        color: var(--gray-800);
-        transition: border-color var(--transition), box-shadow var(--transition);
-    }
-    .form-group input:focus {
-        outline: none;
-        border-color: var(--primary-light);
-        box-shadow: 0 0 0 3px rgba(59,130,246,.12);
-    }
-    .form-group input.input-error {
-        border-color: var(--red-500);
-        box-shadow: 0 0 0 3px rgba(239,68,68,.08);
-    }
-    .form-hint {
-        font-size: 12px;
-        color: var(--gray-400);
-        margin-top: 3px;
-        display: block;
-    }
-    .form-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 14px;
-    }
-    .form-error, .form-success {
-        margin-top: 14px;
-        padding: 10px 14px;
-        border-radius: var(--radius);
-        font-size: 14px;
-        font-weight: 500;
-        animation: fadeUp .25s ease;
-    }
-    .form-error {
-        background: var(--red-50);
-        color: var(--red-500);
-        border-left: 3px solid var(--red-500);
-    }
-    .form-success {
-        background: var(--green-50);
-        color: var(--green-600);
-        border-left: 3px solid var(--green-500);
-    }
-    .hidden { display: none !important; }
-
-    @keyframes fadeUp {
-        from { opacity: 0; transform: translateY(6px); }
-        to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ── AUTH LAYOUT ── */
-    .auth-main {
-        flex: 1;
+    .institute {
         display: flex;
         align-items: center;
-        justify-content: center;
-        padding: 32px 24px;
-    }
-    .auth-container {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        max-width: 920px;
-        width: 100%;
-        background: var(--white);
-        border-radius: var(--radius-xl);
-        box-shadow: var(--shadow-lg);
-        overflow: hidden;
-        min-height: 540px;
-    }
-
-    /* ── LEFT PANEL ── */
-    .auth-info {
-        background: linear-gradient(160deg, var(--primary) 0%, #1a2f7a 100%);
-        color: #fff;
-        padding: 44px 36px;
-        display: flex;
-        align-items: center;
-        position: relative;
-        overflow: hidden;
-    }
-    .auth-info::before {
-        content: '';
-        position: absolute;
-        top: -80px; right: -60px;
-        width: 280px; height: 280px;
-        background: radial-gradient(circle, rgba(147,197,253,.12) 0%, transparent 70%);
-        border-radius: 50%;
-    }
-    .auth-info::after {
-        content: '';
-        position: absolute;
-        bottom: -50px; left: -40px;
-        width: 180px; height: 180px;
-        background: radial-gradient(circle, rgba(255,255,255,.06) 0%, transparent 70%);
-        border-radius: 50%;
-    }
-    .auth-info-content { position: relative; z-index: 1; }
-    .auth-info h2 {
-        font-size: 24px;
-        font-weight: 700;
-        margin-bottom: 6px;
-        line-height: 1.3;
-    }
-    .info-desc {
-        font-size: 14px;
-        opacity: .8;
-        margin-bottom: 28px;
-        line-height: 1.6;
-    }
-    .info-features {
-        display: flex;
-        flex-direction: column;
-        gap: 14px;
+        gap: 16px;
         margin-bottom: 32px;
+        animation: fadeDown .6s ease both;
     }
-    .feature-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-size: 14px;
-        opacity: .92;
+    .inst-logo {
+        width: 60px; height: 60px;
+        background: rgba(255,255,255,.08);
+        border: 1.5px solid rgba(200,168,78,.3);
+        border-radius: 14px;
+        display: flex; align-items: center; justify-content: center;
     }
-    .feature-icon {
-        width: 34px; height: 34px;
-        background: rgba(255,255,255,.1);
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 16px;
-        flex-shrink: 0;
+    .inst-name { font-family: 'Noto Serif Thai', serif; font-size: 15px; font-weight: 600; opacity: .85; }
+    .inst-name-en { font-size: 12px; opacity: .5; letter-spacing: .5px; }
+    .hero-title {
+        font-family: 'Noto Serif Thai', serif;
+        font-size: 36px; font-weight: 700; line-height: 1.3;
+        margin-bottom: 12px;
+        animation: fadeDown .6s ease .1s both;
     }
-    .deadline-box {
-        background: rgba(255,255,255,.1);
-        border: 1px solid rgba(255,255,255,.15);
-        border-radius: var(--radius);
-        padding: 14px 18px;
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-        backdrop-filter: blur(4px);
+    .hero-title .gold { color: var(--gold); }
+    .hero-desc {
+        font-size: 16px; opacity: .7; max-width: 560px; line-height: 1.7;
+        animation: fadeDown .6s ease .2s both;
     }
-    .deadline-label {
-        font-size: 11px;
-        opacity: .6;
-        text-transform: uppercase;
-        letter-spacing: .8px;
-        font-weight: 600;
+    .hero-line {
+        width: 60px; height: 3px;
+        background: linear-gradient(90deg, var(--gold), transparent);
+        border-radius: 2px;
+        margin: 20px 0 0;
+        animation: fadeDown .6s ease .3s both;
     }
-    .deadline-date {
-        font-size: 18px;
-        font-weight: 700;
+    @keyframes fadeDown {
+        from { opacity: 0; transform: translateY(-12px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── RIGHT PANEL ── */
-    .auth-forms {
-        padding: 36px 32px;
-        display: flex;
-        flex-direction: column;
+    /* ═══ COURSES ═══ */
+    .courses-section {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 48px 32px 60px;
     }
-    .auth-tabs {
-        display: flex;
+    .section-header { text-align: center; margin-bottom: 36px; }
+    .section-tag {
+        display: inline-block;
+        font-size: 12px; font-weight: 700;
+        color: var(--blue);
         background: var(--gray-100);
-        border-radius: var(--radius);
-        padding: 3px;
-        margin-bottom: 28px;
+        border: 1px solid var(--gray-200);
+        padding: 4px 14px;
+        border-radius: 20px;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
     }
-    .auth-tab {
-        flex: 1;
-        padding: 10px 16px;
-        font-family: 'Sarabun', sans-serif;
-        font-size: 14px;
-        font-weight: 600;
-        border: none;
-        background: transparent;
-        border-radius: 6px;
-        cursor: pointer;
-        color: var(--gray-500);
-        transition: all var(--transition);
-    }
-    .auth-tab:hover:not(.active) { color: var(--gray-700); }
-    .auth-tab.active {
-        background: var(--white);
-        color: var(--primary);
-        box-shadow: var(--shadow-sm);
-    }
-    .auth-form {
-        display: none;
-        flex-direction: column;
-        flex: 1;
-        animation: fadeUp .3s ease;
-    }
-    .auth-form.active { display: flex; }
+    .section-header h2 { font-family: 'Noto Serif Thai', serif; font-size: 26px; font-weight: 700; color: var(--gray-900); }
+    .section-header p { font-size: 15px; color: var(--gray-500); margin-top: 6px; }
 
-    /* Password toggle */
-    .pw-wrapper { position: relative; }
-    .pw-wrapper input { padding-right: 44px; }
-    .pw-toggle {
-        position: absolute;
-        right: 10px; top: 50%;
-        transform: translateY(-50%);
-        background: none;
-        border: none;
-        cursor: pointer;
-        color: var(--gray-400);
-        padding: 4px;
+    /* Cards Grid */
+    .courses-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 24px;
+    }
+    .course-card {
+        background: var(--white);
+        border: 1px solid var(--gray-200);
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+        transition: all .3s ease;
         display: flex;
-        align-items: center;
-        transition: color var(--transition);
+        flex-direction: column;
     }
-    .pw-toggle:hover { color: var(--gray-600); }
-    .pw-toggle svg { display: block; }
+    .course-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(12,29,63,.1);
+        border-color: var(--blue-light);
+    }
+    .card-accent { height: 5px; background: linear-gradient(90deg, var(--blue), var(--blue-light)); }
+    .card-accent.gold { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+    .card-body { padding: 28px 24px 20px; flex: 1; }
 
-    /* ── FOOTER ── */
-    .footer {
-        margin-top: auto;
-        padding: 18px 24px;
-        text-align: center;
-        font-size: 12.5px;
-        color: var(--gray-400);
-        border-top: 1px solid var(--gray-100);
-        background: var(--white);
+    .card-status {
+        display: inline-flex; align-items: center; gap: 5px;
+        font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 12px; margin-bottom: 12px;
     }
+    .st-open { background: #f0fdf4; color: #16a34a; }
+    .st-open::before { content:''; width:6px; height:6px; border-radius:50%; background:#22c55e; }
+    .st-closed { background: #fef2f2; color: #dc2626; }
+    .st-closed::before { content:''; width:6px; height:6px; border-radius:50%; background:#ef4444; }
+    .st-soon { background: #fffbeb; color: #d97706; }
+    .st-soon::before { content:''; width:6px; height:6px; border-radius:50%; background:#f59e0b; }
 
-    /* ── TOAST ── */
-    .toast {
-        position: fixed;
-        top: 20px; right: 20px;
-        z-index: 10000;
-        padding: 13px 20px;
-        border-radius: var(--radius);
-        font-family: 'Sarabun', sans-serif;
-        font-size: 14px;
-        font-weight: 500;
-        box-shadow: var(--shadow-lg);
-        animation: slideIn .3s ease;
-        max-width: 380px;
-        color: #fff;
-    }
-    .toast-success { background: var(--green-600); }
-    .toast-error { background: var(--red-500); }
-    @keyframes slideIn {
-        from { opacity: 0; transform: translateX(40px); }
-        to   { opacity: 1; transform: translateX(0); }
-    }
+    .card-title { font-family: 'Noto Serif Thai', serif; font-size: 19px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; line-height: 1.4; }
+    .card-cohort { font-size: 13px; color: var(--blue); font-weight: 600; margin-bottom: 10px; }
+    .card-desc { font-size: 14px; color: var(--gray-500); line-height: 1.6; margin-bottom: 16px; }
+    .card-meta { display: flex; flex-direction: column; gap: 6px; }
+    .meta-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--gray-600); }
+    .meta-icon { width: 28px; height: 28px; background: var(--gray-100); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
 
-    /* ── RESPONSIVE ── */
+    .card-footer { padding: 16px 24px; border-top: 1px solid var(--gray-100); display: flex; align-items: center; justify-content: space-between; }
+    .card-deadline { font-size: 12px; color: var(--gray-400); }
+
+    .card-btn {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 9px 20px; font-family: 'Sarabun', sans-serif; font-size: 14px; font-weight: 600;
+        border: none; border-radius: var(--radius); cursor: pointer; text-decoration: none; transition: all .2s;
+    }
+    .btn-go { background: var(--blue); color: var(--white); }
+    .btn-go:hover { background: var(--navy-light); box-shadow: 0 4px 12px rgba(30,64,175,.3); }
+    .btn-off { background: var(--gray-100); color: var(--gray-400); cursor: not-allowed; }
+    .card-btn .arrow { transition: transform .2s; }
+    .card-btn:hover .arrow { transform: translateX(3px); }
+
+    /* Add card */
+    .add-card {
+        border: 2px dashed var(--gray-300); border-radius: var(--radius-xl);
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        min-height: 280px; background: transparent;
+    }
+    .add-icon { width: 48px; height: 48px; background: var(--gray-100); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; color: var(--gray-400); margin-bottom: 10px; }
+    .add-text { font-size: 14px; color: var(--gray-400); font-weight: 500; }
+    .add-hint { font-size: 12px; color: var(--gray-300); margin-top: 4px; }
+
+    /* Footer */
+    .footer { padding: 24px 32px; text-align: center; font-size: 13px; color: var(--gray-400); border-top: 1px solid var(--gray-100); background: var(--white); }
+    .footer a { color: var(--blue); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
     @media (max-width: 768px) {
-        .auth-container { grid-template-columns: 1fr; max-width: 460px; }
-        .auth-info { padding: 28px 24px; }
-        .auth-info h2 { font-size: 20px; }
-        .info-features { display: none; }
-        .auth-forms { padding: 28px 24px; }
-        .form-row { grid-template-columns: 1fr; }
-        .header-inner { padding: 10px 16px; }
-    }
-    @media (max-width: 400px) {
-        .auth-main { padding: 16px 12px; }
-        .auth-forms { padding: 24px 18px; }
+        .hero-inner { padding: 40px 20px 36px; }
+        .hero-title { font-size: 26px; }
+        .courses-section { padding: 32px 20px 48px; }
+        .courses-grid { grid-template-columns: 1fr; }
+        .inst-logo { width: 48px; height: 48px; }
     }
     </style>
 </head>
 <body>
 
-    <!-- ════════════ HEADER ════════════ -->
-    <header class="header">
-        <div class="header-inner">
-            <div class="logo-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <path d="M4 21V8l8-5 8 5v13l-8-3.5L4 21z" fill="#fff" opacity=".9"/>
-                    <path d="M12 3v14" stroke="#93c5fd" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-            </div>
-            <div>
-                <div class="logo-title">ระบบรับสมัครหลักสูตร</div>
-                <div class="logo-subtitle">King Prajadhipok's Institute</div>
-            </div>
-        </div>
-    </header>
-
-    <!-- ════════════ MAIN ════════════ -->
-    <main class="auth-main">
-        <div class="auth-container">
-
-            <!-- ── Left: Info Panel ── -->
-            <div class="auth-info">
-                <div class="auth-info-content">
-                    <h2>หลักสูตร<br>ประกาศนียบัตรชั้นสูง</h2>
-                    <p class="info-desc">ระบบรับสมัครออนไลน์สำหรับหลักสูตรของสถาบันพระปกเกล้า</p>
-
-                    <div class="info-features">
-                        <div class="feature-item">
-                            <span class="feature-icon">📝</span>
-                            <span>สมัครออนไลน์ได้ตลอด 24 ชม.</span>
-                        </div>
-                        <div class="feature-item">
-                            <span class="feature-icon">📎</span>
-                            <span>แนบเอกสารประกอบการสมัคร</span>
-                        </div>
-                        <div class="feature-item">
-                            <span class="feature-icon">✏️</span>
-                            <span>แก้ไขข้อมูลได้จนกว่าจะปิดรับ</span>
-                        </div>
-                        <div class="feature-item">
-                            <span class="feature-icon">📄</span>
-                            <span>ดาวน์โหลดใบสมัคร PDF</span>
-                        </div>
-                    </div>
-
-                    <div class="deadline-box">
-                        <span class="deadline-label">ปิดรับสมัคร</span>
-                        <span class="deadline-date" id="deadlineDisplay">กำลังโหลด...</span>
-                    </div>
+    <section class="hero">
+        <div class="hero-inner">
+            <div class="institute">
+                <div class="inst-logo">
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+                        <path d="M4 21V8l8-5 8 5v13l-8-3.5L4 21z" fill="#c8a84e" opacity=".9"/>
+                        <path d="M12 3v14" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity=".6"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="inst-name">สถาบันพระปกเกล้า</div>
+                    <div class="inst-name-en">King Prajadhipok's Institute</div>
                 </div>
             </div>
-
-            <!-- ── Right: Auth Forms ── -->
-            <div class="auth-forms">
-
-                <!-- Tab Switcher -->
-                <div class="auth-tabs">
-                    <button class="auth-tab active" data-tab="login">เข้าสู่ระบบ</button>
-                    <button class="auth-tab" data-tab="register">สมัครสมาชิก</button>
-                </div>
-
-                <!-- ─── LOGIN FORM ─── -->
-                <form id="loginForm" class="auth-form active" novalidate>
-                    <div class="form-group">
-                        <label for="loginId">เลขบัตรประชาชน</label>
-                        <input type="text" id="loginId" maxlength="13"
-                               placeholder="กรอกเลขบัตรประชาชน 13 หลัก" required
-                               inputmode="numeric" autocomplete="username">
-                    </div>
-                    <div class="form-group">
-                        <label for="loginPw">รหัสผ่าน</label>
-                        <div class="pw-wrapper">
-                            <input type="password" id="loginPw"
-                                   placeholder="กรอกรหัสผ่าน" required autocomplete="current-password">
-                            <button type="button" class="pw-toggle" aria-label="แสดง/ซ่อนรหัสผ่าน">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                     stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                    <circle cx="12" cy="12" r="3"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-full" id="loginBtn">
-                        <span class="btn-text">เข้าสู่ระบบ</span>
-                        <span class="btn-loader hidden"></span>
-                    </button>
-                    <div id="loginError" class="form-error hidden"></div>
-                </form>
-
-                <!-- ─── REGISTER FORM ─── -->
-                <form id="registerForm" class="auth-form" novalidate>
-                    <div class="form-group">
-                        <label for="regId">เลขบัตรประชาชน</label>
-                        <input type="text" id="regId" maxlength="13"
-                               placeholder="กรอกเลขบัตรประชาชน 13 หลัก" required
-                               inputmode="numeric">
-                        <small class="form-hint">ใช้เป็น Username สำหรับเข้าสู่ระบบ</small>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="regFname">ชื่อ</label>
-                            <input type="text" id="regFname" placeholder="ชื่อจริง" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="regLname">นามสกุล</label>
-                            <input type="text" id="regLname" placeholder="นามสกุล" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="regEmail">อีเมล</label>
-                        <input type="email" id="regEmail" placeholder="example@email.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="regPhone">เบอร์โทรศัพท์</label>
-                        <input type="tel" id="regPhone" maxlength="10"
-                               placeholder="0812345678" required inputmode="numeric">
-                    </div>
-                    <div class="form-group">
-                        <label for="regPw">รหัสผ่าน</label>
-                        <div class="pw-wrapper">
-                            <input type="password" id="regPw" minlength="6"
-                                   placeholder="อย่างน้อย 6 ตัวอักษร" required>
-                            <button type="button" class="pw-toggle" aria-label="แสดง/ซ่อนรหัสผ่าน">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                     stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                    <circle cx="12" cy="12" r="3"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="regPw2">ยืนยันรหัสผ่าน</label>
-                        <div class="pw-wrapper">
-                            <input type="password" id="regPw2" minlength="6"
-                                   placeholder="กรอกรหัสผ่านอีกครั้ง" required>
-                            <button type="button" class="pw-toggle" aria-label="แสดง/ซ่อนรหัสผ่าน">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                     stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                    <circle cx="12" cy="12" r="3"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-full" id="regBtn">
-                        <span class="btn-text">สมัครสมาชิก</span>
-                        <span class="btn-loader hidden"></span>
-                    </button>
-                    <div id="regError" class="form-error hidden"></div>
-                    <div id="regSuccess" class="form-success hidden"></div>
-                </form>
-
-            </div>
+            <h1 class="hero-title">ระบบรับสมัคร<br><span class="gold">หลักสูตรออนไลน์</span></h1>
+            <p class="hero-desc">ระบบรับสมัครหลักสูตรของสถาบันพระปกเกล้า สมัครออนไลน์ได้ตลอด 24 ชม. แนบเอกสาร แก้ไขข้อมูล และดาวน์โหลดใบสมัครเป็น PDF ได้ทันที</p>
+            <div class="hero-line"></div>
         </div>
-    </main>
+    </section>
 
-    <!-- ════════════ FOOTER ════════════ -->
+    <section class="courses-section">
+        <div class="section-header">
+            <span class="section-tag">หลักสูตรที่เปิดรับสมัคร</span>
+            <h2>เลือกหลักสูตรที่ต้องการ</h2>
+            <p>คลิกที่หลักสูตรเพื่อเข้าสู่ระบบสมัคร</p>
+        </div>
+        <div class="courses-grid" id="grid"></div>
+    </section>
+
     <footer class="footer">
-        &copy; 2026 สถาบันพระปกเกล้า (King Prajadhipok's Institute)
+        <p>&copy; 2026 สถาบันพระปกเกล้า (King Prajadhipok's Institute) · <a href="https://www.kpi.ac.th" target="_blank">www.kpi.ac.th</a></p>
     </footer>
 
-
-    <!-- ════════════════════════════════════════
-         JAVASCRIPT
-         ════════════════════════════════════════ -->
-    <script src="config.js"></script>
     <script>
-    // Fallback: ถ้าโหลด config.js ไม่ได้ ใช้ค่านี้แทน
-    if(typeof CONFIG==='undefined'){var CONFIG={GAS_URL:'https://script.google.com/macros/s/AKfycbyNiLUBuwfSh_4QhplEX6qw6BwlcK6e1XtwnxDbcczCD9OOBYbUULewU1QEXzGm0Tz5/exec',get isMock(){return!this.GAS_URL},SESSION_KEY:'kpi_course_session',MAX_FILE:5242880,FILE_TYPES:['application/pdf','image/jpeg','image/png'],ADMIN_USER:'admin',ADMIN_PASS:'kpi@admin2026'};}
+    /* ════════════════════════════════════════════
+       ★ COURSE DATA — เพิ่มหลักสูตรใหม่ที่นี่ ★
+       ════════════════════════════════════════════
+       
+       โครงสร้างโฟลเดอร์:
+       root/
+       ├── index.html               ← ไฟล์นี้ (หน้าแรกรวม)
+       ├── ppr30/              ← โฟลเดอร์หลักสูตร 1
+       │   ├── config.js
+       │   ├── index.html
+       │   ├── application.html
+       │   └── admin.html
+       ├── course-leadership/       ← โฟลเดอร์หลักสูตร 2
+       │   ├── config.js
+       │   ├── index.html
+       │   ├── application.html
+       │   └── admin.html
+       └── ...
+       
+       วิธีเพิ่มหลักสูตรใหม่:
+       1. สร้างโฟลเดอร์ใหม่ (copy จากหลักสูตรเดิม)
+       2. สร้าง Google Sheets + Apps Script ใหม่
+       3. ใส่ GAS_URL ใน config.js ของโฟลเดอร์นั้น
+       4. เพิ่ม object ใน COURSES array ด้านล่าง
+       ════════════════════════════════════════════ */
+
+    const COURSES = [
+        {
+            title: 'หลักสูตรประกาศนียบัตรชั้นสูง',
+            cohort: 'รุ่นที่ 1 ประจำปี 2569',
+            desc: 'หลักสูตรสำหรับผู้บริหารระดับสูงและบุคคลทั่วไป เพื่อเสริมสร้างความรู้ด้านการเมืองการปกครองในระบอบประชาธิปไตย',
+            folder: 'ppr30',
+            status: 'open',          // open | closed | soon
+            startDate: '2026-01-01',
+            endDate: '2026-06-30',
+            accent: 'blue',          // blue | gold
+        },
+        // ═══ ตัวอย่างหลักสูตรที่ 2 (ลบ comment ออกเพื่อแสดง) ═══
+        // {
+        //     title: 'หลักสูตรผู้นำยุคใหม่ในระบอบประชาธิปไตย',
+        //     cohort: 'รุ่นที่ 1',
+        //     desc: 'พัฒนาศักยภาพผู้นำรุ่นใหม่ เสริมทักษะการคิดเชิงนโยบายและการบริหารจัดการสมัยใหม่',
+        //     folder: 'course-leadership',
+        //     status: 'soon',
+        //     startDate: '2026-07-01',
+        //     endDate: '2026-12-31',
+        //     accent: 'gold',
+        // },
+    ];
+
+    /* ═══ Render ═══ */
+    function fmtDate(ds) {
+        if (!ds) return '-';
+        const d = new Date(ds);
+        const m = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+        return d.getDate() + ' ' + m[d.getMonth()] + ' ' + (d.getFullYear() + 543);
+    }
+
+    (function render() {
+        const grid = document.getElementById('grid');
+        let html = '';
+
+        COURSES.forEach(c => {
+            const dl = new Date(c.endDate);
+            const days = Math.ceil((dl - new Date()) / 864e5);
+            const isOpen = c.status === 'open' && days > 0;
+            const isSoon = c.status === 'soon';
+
+            let stClass, stText;
+            if (isOpen) { stClass = 'st-open'; stText = 'เปิดรับสมัคร'; }
+            else if (isSoon) { stClass = 'st-soon'; stText = 'เร็วๆ นี้'; }
+            else { stClass = 'st-closed'; stText = 'ปิดรับสมัคร'; }
+
+            const dlText = isOpen
+                ? 'ปิดรับ ' + fmtDate(c.endDate) + ' (เหลือ ' + days + ' วัน)'
+                : isSoon ? 'เปิดรับ ' + fmtDate(c.startDate) : 'ปิดรับสมัครแล้ว';
+
+            const btn = isOpen
+                ? '<a href="' + c.folder + '/index.html" class="card-btn btn-go">เข้าสู่ระบบสมัคร <span class="arrow">→</span></a>'
+                : '<span class="card-btn btn-off">' + (isSoon ? 'ยังไม่เปิดรับ' : 'ปิดรับแล้ว') + '</span>';
+
+            html += '<div class="course-card">'
+                + '<div class="card-accent ' + (c.accent === 'gold' ? 'gold' : '') + '"></div>'
+                + '<div class="card-body">'
+                + '<span class="card-status ' + stClass + '">' + stText + '</span>'
+                + '<h3 class="card-title">' + c.title + '</h3>'
+                + '<div class="card-cohort">' + c.cohort + '</div>'
+                + '<p class="card-desc">' + c.desc + '</p>'
+                + '<div class="card-meta">'
+                + '<div class="meta-item"><span class="meta-icon">📅</span> รับสมัคร ' + fmtDate(c.startDate) + ' — ' + fmtDate(c.endDate) + '</div>'
+                + '<div class="meta-item"><span class="meta-icon">📝</span> สมัครออนไลน์ พร้อมแนบเอกสาร</div>'
+                + '</div></div>'
+                + '<div class="card-footer"><span class="card-deadline">' + dlText + '</span>' + btn + '</div>'
+                + '</div>';
+        });
+
+        // Placeholder card
+        html += '<div class="add-card">'
+            + '<div class="add-icon">+</div>'
+            + '<div class="add-text">เพิ่มหลักสูตรใหม่</div>'
+            + '<div class="add-hint">สร้างโฟลเดอร์ + เพิ่มข้อมูลใน COURSES array</div>'
+            + '</div>';
+
+        grid.innerHTML = html;
+    })();
     </script>
-    <script>
-
-
-    /* ==================================================
-       UTILITIES
-       ================================================== */
-    const U = {
-        // ── API ──
-        async post(action, data = {}) {
-            if (CONFIG.isMock) return this._mock(action, data);
-            try {
-                const res = await fetch(CONFIG.GAS_URL, {
-                    method: 'POST', mode: 'cors',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify({ action, ...data })
-                });
-                return await res.json();
-            } catch (e) {
-                return { success: false, error: 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้' };
-            }
-        },
-
-        async get(action, params = {}) {
-            if (CONFIG.isMock) return this._mockGet(action, params);
-            try {
-                const url = new URL(CONFIG.GAS_URL);
-                url.searchParams.set('action', action);
-                Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
-                const res = await fetch(url.toString(), { mode: 'cors' });
-                return await res.json();
-            } catch (e) {
-                return { success: false, error: 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้' };
-            }
-        },
-
-        // ── Mock API (ทดสอบโดยไม่ต้องมี Backend) ──
-        _mockUsers: JSON.parse(localStorage.getItem('_mock_users') || '[]'),
-
-        _mockSaveUsers() {
-            localStorage.setItem('_mock_users', JSON.stringify(this._mockUsers));
-        },
-
-        _mock(action, data) {
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    if (action === 'register') {
-                        const exists = this._mockUsers.find(u => u.idCard === data.idCard);
-                        if (exists) return resolve({ success: false, error: 'เลขบัตรประชาชนนี้ลงทะเบียนแล้ว' });
-                        this._mockUsers.push({ idCard: data.idCard, firstName: data.firstName, lastName: data.lastName, password: data.password });
-                        this._mockSaveUsers();
-                        return resolve({ success: true });
-                    }
-                    if (action === 'login') {
-                        const user = this._mockUsers.find(u => u.idCard === data.idCard && u.password === data.password);
-                        if (user) return resolve({ success: true, data: { name: user.firstName + ' ' + user.lastName, hasApplication: false } });
-                        return resolve({ success: false, error: 'เลขบัตรประชาชนหรือรหัสผ่านไม่ถูกต้อง' });
-                    }
-                    resolve({ success: false, error: 'Unknown action' });
-                }, 600); // จำลอง delay
-            });
-        },
-
-        _mockGet(action) {
-            return Promise.resolve(
-                action === 'getSettings'
-                    ? { success: true, data: { endDate: '2026-06-30', status: 'open', courseName: 'หลักสูตรประกาศนียบัตรชั้นสูง' } }
-                    : { success: false }
-            );
-        },
-
-        // ── Session ──
-        setSession(data) {
-            sessionStorage.setItem(CONFIG.SESSION_KEY, JSON.stringify({ ...data, ts: Date.now() }));
-        },
-        getSession() {
-            try {
-                const s = JSON.parse(sessionStorage.getItem(CONFIG.SESSION_KEY));
-                if (!s) return null;
-                if (Date.now() - s.ts > 2 * 3600000) { this.clearSession(); return null; }
-                return s;
-            } catch { return null; }
-        },
-        clearSession() { sessionStorage.removeItem(CONFIG.SESSION_KEY); },
-
-        // ── Validation ──
-        validId(id) {
-            if (!/^\d{13}$/.test(id)) return false;
-            let sum = 0;
-            for (let i = 0; i < 12; i++) sum += parseInt(id[i]) * (13 - i);
-            return (11 - (sum % 11)) % 10 === parseInt(id[12]);
-        },
-        validEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); },
-        validPhone(p) { return /^0\d{8,9}$/.test(p); },
-
-        // ── Hash IP ──
-        async hashIP() {
-            try {
-                const ip = await (await fetch('https://api.ipify.org?format=text')).text();
-                const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(ip + '_kpi'));
-                return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-            } catch { return ''; }
-        },
-
-        // ── Formatting ──
-        fmtDate(ds) {
-            if (!ds) return '-';
-            const d = new Date(ds);
-            const m = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
-            return `${d.getDate()} ${m[d.getMonth()]} ${d.getFullYear() + 543}`;
-        },
-
-        // ── UI Helpers ──
-        showErr(id, msg) { const el = $(id); el.textContent = msg; el.classList.remove('hidden'); },
-        hideErr(id) { $(id).classList.add('hidden'); },
-        btnLoad(id, loading) {
-            const b = $(id);
-            b.disabled = loading;
-            b.querySelector('.btn-text').classList.toggle('hidden', loading);
-            b.querySelector('.btn-loader').classList.toggle('hidden', !loading);
-        },
-        toast(msg, type = 'success') {
-            const t = document.createElement('div');
-            t.className = `toast toast-${type}`;
-            t.textContent = msg;
-            document.body.appendChild(t);
-            setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity .3s'; setTimeout(() => t.remove(), 300); }, 3000);
-        },
-
-        // ── Guard double submit ──
-        _lock: false,
-        guard() { if (this._lock) return false; this._lock = true; setTimeout(() => this._lock = false, 5000); return true; },
-        unlock() { this._lock = false; },
-    };
-
-    const $ = id => document.getElementById(id);
-
-
-    /* ==================================================
-       INIT
-       ================================================== */
-    document.addEventListener('DOMContentLoaded', () => {
-        // ถ้า login อยู่แล้ว → redirect
-        const session = U.getSession();
-        if (session && session.role === 'user') {
-            window.location.href = 'application.html';
-            return;
-        }
-
-        initTabs();
-        initLogin();
-        initRegister();
-        initPwToggles();
-        loadDeadline();
-
-        if (CONFIG.isMock) {
-            console.log('%c★ Mock Mode — ทดสอบได้เลยไม่ต้องมี Backend', 'color:#3b82f6;font-size:14px;font-weight:bold');
-        }
-    });
-
-
-    /* ==================================================
-       TAB SWITCHING
-       ================================================== */
-    function initTabs() {
-        document.querySelectorAll('.auth-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-                tab.classList.add('active');
-                $(tab.dataset.tab + (tab.dataset.tab === 'login' ? 'Form' : 'Form'))
-                const formId = tab.dataset.tab === 'login' ? 'loginForm' : 'registerForm';
-                $(formId).classList.add('active');
-            });
-        });
-    }
-
-
-    /* ==================================================
-       LOGIN
-       ================================================== */
-    function initLogin() {
-        const idInput = $('loginId');
-        // ตัวเลขเท่านั้น
-        idInput.addEventListener('input', () => { idInput.value = idInput.value.replace(/\D/g, ''); });
-
-        $('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            U.hideErr('loginError');
-
-            const idCard = idInput.value.trim();
-            const password = $('loginPw').value;
-
-            // Validate
-            if (!idCard || idCard.length < 13) {
-                markError(idInput, 'กรุณากรอกเลขบัตรประชาชน 13 หลัก');
-                return;
-            }
-            if (!U.validId(idCard)) {
-                markError(idInput, 'เลขบัตรประชาชนไม่ถูกต้อง (Checksum ไม่ผ่าน)');
-                return;
-            }
-            if (!password) {
-                U.showErr('loginError', 'กรุณากรอกรหัสผ่าน');
-                return;
-            }
-
-            U.btnLoad('loginBtn', true);
-            const res = await U.post('login', { idCard, password });
-            U.btnLoad('loginBtn', false);
-
-            if (res.success) {
-                U.setSession({
-                    role: 'user',
-                    idCard,
-                    name: res.data.name,
-                    hasApp: res.data.hasApplication
-                });
-                U.toast('เข้าสู่ระบบสำเร็จ!');
-                setTimeout(() => { window.location.href = 'application.html'; }, 500);
-            } else {
-                U.showErr('loginError', res.error);
-            }
-        });
-    }
-
-
-    /* ==================================================
-       REGISTER
-       ================================================== */
-    function initRegister() {
-        const idInput = $('regId');
-        const phoneInput = $('regPhone');
-
-        // ตัวเลขเท่านั้น
-        [idInput, phoneInput].forEach(el => {
-            el.addEventListener('input', () => { el.value = el.value.replace(/\D/g, ''); });
-        });
-
-        $('registerForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            U.hideErr('regError');
-            $('regSuccess').classList.add('hidden');
-
-            const idCard = idInput.value.trim();
-            const firstName = $('regFname').value.trim();
-            const lastName = $('regLname').value.trim();
-            const email = $('regEmail').value.trim();
-            const phone = phoneInput.value.trim();
-            const pw = $('regPw').value;
-            const pw2 = $('regPw2').value;
-
-            // ── Validate ทีละตัว ──
-            clearErrors();
-
-            if (!U.validId(idCard)) return markError(idInput, 'เลขบัตรประชาชนไม่ถูกต้อง');
-            if (!firstName) return markError($('regFname'), 'กรุณากรอกชื่อ');
-            if (!lastName) return markError($('regLname'), 'กรุณากรอกนามสกุล');
-            if (!U.validEmail(email)) return markError($('regEmail'), 'อีเมลไม่ถูกต้อง');
-            if (!U.validPhone(phone)) return markError(phoneInput, 'เบอร์โทรไม่ถูกต้อง (เริ่มด้วย 0, 9-10 หลัก)');
-            if (pw.length < 6) return markError($('regPw'), 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร');
-            if (pw !== pw2) return markError($('regPw2'), 'รหัสผ่านไม่ตรงกัน');
-
-            if (!U.guard()) return;
-            U.btnLoad('regBtn', true);
-
-            const ipHash = await U.hashIP();
-            const res = await U.post('register', { idCard, firstName, lastName, email, phone, password: pw, ipHash });
-
-            U.btnLoad('regBtn', false);
-            U.unlock();
-
-            if (res.success) {
-                const s = $('regSuccess');
-                s.textContent = '✅ สมัครสมาชิกเรียบร้อย! กรุณาเข้าสู่ระบบ';
-                s.classList.remove('hidden');
-                $('registerForm').reset();
-                // สลับไป Login tab หลัง 1.5 วินาที
-                setTimeout(() => {
-                    document.querySelector('[data-tab="login"]').click();
-                    // Auto-fill เลขบัตร
-                    $('loginId').value = idCard;
-                    $('loginPw').focus();
-                }, 1500);
-            } else {
-                U.showErr('regError', res.error);
-            }
-        });
-    }
-
-
-    /* ==================================================
-       PASSWORD TOGGLE
-       ================================================== */
-    function initPwToggles() {
-        document.querySelectorAll('.pw-toggle').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const input = btn.parentElement.querySelector('input');
-                const show = input.type === 'password';
-                input.type = show ? 'text' : 'password';
-                // เปลี่ยน icon opacity
-                btn.style.opacity = show ? '0.5' : '1';
-            });
-        });
-    }
-
-
-    /* ==================================================
-       LOAD DEADLINE
-       ================================================== */
-    async function loadDeadline() {
-        const res = await U.get('getSettings');
-        const el = $('deadlineDisplay');
-        if (res.success && res.data && res.data.endDate) {
-            el.textContent = U.fmtDate(res.data.endDate);
-        } else {
-            el.textContent = 'ยังไม่กำหนด';
-        }
-    }
-
-
-    /* ==================================================
-       VALIDATION HELPERS
-       ================================================== */
-    function markError(input, msg) {
-        input.classList.add('input-error');
-        input.focus();
-        // แสดง error ในช่องที่เหมาะสม
-        const form = input.closest('form');
-        const errId = form.id === 'loginForm' ? 'loginError' : 'regError';
-        U.showErr(errId, msg);
-        return false; // ใช้ใน return
-    }
-
-    function clearErrors() {
-        document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
-        U.hideErr('loginError');
-        U.hideErr('regError');
-    }
-
-    // เมื่อ user พิมพ์ใหม่ ลบ error state
-    document.addEventListener('input', (e) => {
-        if (e.target.classList.contains('input-error')) {
-            e.target.classList.remove('input-error');
-        }
-    });
-    </script>
-
 </body>
 </html>
